@@ -1,0 +1,39 @@
+<project name="pentaho-visualization-plugin" basedir="." default="default">
+<!-- Import the subfloor-pkg.xml file which contains all the default ant targets -->
+  <import file="build-res/subfloor-pkg.xml" />
+  <import file="build-res/subfloor-js.xml"/>
+
+
+  <!-- 
+  The following overrides are in place to suppress IVY dependency management.  If you
+  want to turn IVY back on, comment out these overrides. 
+  -->
+  <!-- Set default target to skip the ivy "resolve" step 
+  <target name="default" depends="clean-all,dist,package" />
+	-->
+  
+  <!-- Set the clean-all target to skip the "clean-jars" step.  We do not want our build
+  process to delete the "lib" dir
+  <target name="clean-all" depends="clean"/>
+	-->
+
+  <target name="package-zip" depends="install-antcontrib">
+    <if>
+      <equals arg1="${include.js.test.folder}" arg2="true"/>
+      <then>
+        <zip destfile="${dist.dir}/${package.basename}.zip">
+          <zipfileset dir="${stage.dir}"/>
+        </zip>
+      </then>
+      <else>
+        <zip destfile="${dist.dir}/${package.basename}.zip">
+          <zipfileset dir="${stage.dir}">
+            <exclude name="**/test/" />
+            <exclude name="**/tests/" />
+          </zipfileset>
+        </zip>
+      </else>
+    </if>
+  </target>
+
+</project>
